@@ -1,0 +1,20 @@
+group 'philippa.main'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.assertj:assertj-core:3.0.0'
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    reports {
+        junitXml.enabled = false
+        html.enabled = true
+    }
+}
