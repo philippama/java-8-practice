@@ -220,7 +220,7 @@ public class StreamsExercises {
 
         //TODO
 
-        assertThat(fourLetteredWords).containsOnly("unam", "ago.", "tibi", "tuum", "fili");
+        assertThat(fourLetteredWords).containsOnly("unam", "tibi", "tuum", "fili");
     }
 
     /*

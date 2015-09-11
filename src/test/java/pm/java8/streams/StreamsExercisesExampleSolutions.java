@@ -254,7 +254,7 @@ public class StreamsExercisesExampleSolutions {
                 .collect(Collectors.toList())
         ;
 
-        assertThat(fourLetteredWords).containsOnly("unam", "ago.", "tibi", "tuum", "fili");
+        assertThat(fourLetteredWords).containsOnly("unam", "tibi", "tuum", "fili");
     }
 
     /*
