@@ -64,7 +64,7 @@ public class StreamsExercises {
      *  Stream.forEach()
      */
     @Test
-    public void simpleForEach() {
+    public void verySimpleForEach() {
         List<String> sentence = Arrays.asList("I", "can", "print", "a", "stream", ".");
 
         // Convert the the sentence to a stream and print it.
