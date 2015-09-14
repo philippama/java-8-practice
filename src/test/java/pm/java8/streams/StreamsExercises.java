@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -233,11 +232,6 @@ public class StreamsExercises {
     public void sumFirstTwelveIntegersWithIntStream() {
 
         long sum = 0L;
-
-        // Example solution using iterate() and range()
-        sum = IntStream.iterate(1, i -> i + 1)
-                .limit(12)
-                .sum();
 
         //TODO
 
