@@ -84,6 +84,8 @@ public class StreamsExercisesExampleSolutions {
 
         long count = 0;
 
+        // Count the number of words.
+
         // Example solution
         count = Arrays.stream(words).count();
 
@@ -101,6 +103,8 @@ public class StreamsExercisesExampleSolutions {
         List<String> words = Arrays.asList("one", "two", "three", "four", "five");
 
         long totalLength = 0;
+
+        // Add the lengths of all the words.
 
         // Example solution
         totalLength = words.stream()
@@ -122,6 +126,8 @@ public class StreamsExercisesExampleSolutions {
 
         List<String> names = null;
 
+        // Start with List<Person> people which is defined above. Make a list of first names.
+
         // Example solution
         names = people.stream()
                 .map(Person::getFirstName)
@@ -141,6 +147,8 @@ public class StreamsExercisesExampleSolutions {
     public void makeStringOfFirstNamesFromPeople() {
 
         String names = null;
+
+        // Start with List<Person> people which is defined above. Join all the first names to form a comma separated string.
 
         // Example solution
         names = people.stream()
@@ -162,6 +170,8 @@ public class StreamsExercisesExampleSolutions {
     public void makeListOfFirstNamesFromPeopleInAlphabeticalOrder() {
 
         List<String> names = null;
+
+        // Start with List<Person> people which is defined above. Make a list of first names in alphabetical order.
 
         // Example solution
         names = people.stream()
@@ -185,6 +195,9 @@ public class StreamsExercisesExampleSolutions {
     public void makeListOf1st3PeopleInAlphabeticalOrderLastNameThenFirstName() {
 
         List<Person> names = null;
+
+        // Start with List<Person> people which is defined above. Make a list of the first three names in alphabetical
+        // order when sorted by last name then first name.
 
         // Example solution
         names = people.stream()
@@ -214,6 +227,9 @@ public class StreamsExercisesExampleSolutions {
 
         List<String> names = null;
 
+        // Start with List<Person> people which is defined above. Make a list of all the first and last names in
+        // alphabetical order.
+
         // Example solution
         names = people.stream()
                 .flatMap(p -> Stream.of(p.getFirstName(), p.getLastName()))
@@ -240,6 +256,7 @@ public class StreamsExercisesExampleSolutions {
 
         List<String> fourLetteredWords = null;
 
+        // Make a list of all the four lettered words in a file.
         // When the test passes, see if you can print out all the lines of the limerick before you break out the words.
 
         // Example solution
@@ -268,6 +285,8 @@ public class StreamsExercisesExampleSolutions {
 
         long sum = 0L;
 
+        // Sum the first twelve integers (1-12)
+
         // Example solution using iterate() and range()
         sum = IntStream.iterate(1, i -> i + 1)
                 .limit(12)
@@ -292,16 +311,27 @@ public class StreamsExercisesExampleSolutions {
 
         Map<String, List<Person>> groups = null;
 
+        // Start with List<Person> people which is defined above. Create a map with
+        // key = last name and value = a list of people with that last name.
+
         // Example solution
         groups = people.stream()
                 .collect(Collectors.groupingBy(Person::getLastName));
 
         assertThat(groups).containsKeys("Coniston", "Hawkshead", "Sawrey");
-        assertThat(groups.get("Coniston")).containsExactlyElementsOf(Arrays.asList(new Person("Felicity", "Coniston")));
+
+        // People with last name = "Coniston"
+        assertThat(groups.get("Coniston")).containsExactlyElementsOf(Arrays.asList(
+                new Person("Felicity", "Coniston")
+        ));
+
+        // People with last name = "Hawkshead"
         assertThat(groups.get("Hawkshead")).containsExactlyElementsOf(Arrays.asList(
                 new Person("Gerald", "Hawkshead"),
                 new Person("Eustace", "Hawkshead")
         ));
+
+        // People with last name = "Sawrey"
         assertThat(groups.get("Sawrey")).containsExactlyElementsOf(Arrays.asList(
                 new Person("Bernard", "Sawrey"),
                 new Person("Duncan", "Sawrey"),
