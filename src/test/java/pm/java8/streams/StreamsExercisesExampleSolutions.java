@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 
 /**
  * This test suite demonstrates the following ways of generating and using streams.
@@ -38,10 +39,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  *        stream.distinct();
  *
  * Terminal operations and collectors
- *        stream.forEach(s -> System.out.println(s)); // method reference?
+ *        stream.forEach(System.out::println);
  *        stream.count();
  *        [todo: stream.reduce()]
  *        stream.collect(Collectors.toList());
+ *        stream.collect(Collectors.toMap(String::toLowerCase, String::toUpperCase);
  *        stream.collect(Collectors.joining(","));
  *        stream.collect(Collectors.groupingBy(String::length));
  */
@@ -67,7 +69,8 @@ public class StreamsExercisesExampleSolutions {
     public void verySimpleForEach() {
         List<String> sentence = Arrays.asList("I", "can", "print", "a", "stream", ".");
 
-        // Convert the the sentence to a stream and print it.
+        // You could do this with a List.forEach() but use a stream for practice:
+        // convert the the sentence to a stream and print the words, one per line.
 
         // Example solution
         sentence.stream().forEach(System.out::println);
@@ -108,8 +111,8 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution
         totalLength = words.stream()
-                .mapToInt(String::length)
-                .sum();
+                           .mapToInt(String::length)
+                           .sum();
 
         assertThat(totalLength).isEqualTo(19);
     }
@@ -130,10 +133,68 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution
         names = people.stream()
-                .map(Person::getFirstName)
-                .collect(Collectors.toList());
+                      .map(Person::getFirstName)
+                      .collect(Collectors.toList());
 
         assertThat(names).isEqualTo(Arrays.asList("Bernard", "Duncan", "Anastasia", "Charlotte", "Daphne", "Gerald", "Eustace", "Felicity"));
+    }
+
+    /*
+     * Shows:
+     *  Collection.stream()
+     *  Stream.collect()
+     *  Collectors.toMap()
+     */
+    @Test
+    public void makeMapOfFirstNameToLastName() {
+
+        Map<String, String> firstToLast = null;
+
+        // Start with List<Person> people which is defined above. Make a map with key = first name, value = last name.
+
+        // Example solution
+        firstToLast = people.stream()
+                            .collect(Collectors.toMap(Person::getFirstName, Person::getLastName));
+
+        assertThat(firstToLast).containsOnly(
+                entry("Bernard", "Sawrey"),
+                entry("Duncan", "Sawrey"),
+                entry("Anastasia", "Sawrey"),
+                entry("Charlotte", "Sawrey"),
+                entry("Daphne", "Sawrey"),
+                entry("Gerald", "Hawkshead"),
+                entry("Eustace", "Hawkshead"),
+                entry("Felicity", "Coniston")
+        );
+    }
+
+    /*
+     * Shows:
+     *  Collection.stream()
+     *  Stream.collect()
+     *  Collectors.toMap()
+     */
+    @Test
+    public void makeMapOfLowerFirstNameToUpperLastName() {
+
+        Map<String, String> firstToLast = null;
+
+        // Start with List<Person> people which is defined above. Make a map with key = first name in lower case, value = last name in upper case.
+
+        // Example solution
+        firstToLast = people.stream()
+                            .collect(Collectors.toMap(person -> person.getFirstName().toLowerCase(), person -> person.getLastName().toUpperCase()));
+
+        assertThat(firstToLast).containsOnly(
+                entry("bernard", "SAWREY"),
+                entry("duncan", "SAWREY"),
+                entry("anastasia", "SAWREY"),
+                entry("charlotte", "SAWREY"),
+                entry("daphne", "SAWREY"),
+                entry("gerald", "HAWKSHEAD"),
+                entry("eustace", "HAWKSHEAD"),
+                entry("felicity", "CONISTON")
+        );
     }
 
     /*
@@ -152,8 +213,8 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution
         names = people.stream()
-                .map(Person::getFirstName)
-                .collect(Collectors.joining(","));
+                      .map(Person::getFirstName)
+                      .collect(Collectors.joining(","));
 
         assertThat(names).isEqualTo("Bernard,Duncan,Anastasia,Charlotte,Daphne,Gerald,Eustace,Felicity");
     }
@@ -175,9 +236,9 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution
         names = people.stream()
-        .map(Person::getFirstName)
-                .sorted()
-                .collect(Collectors.toList());
+                      .map(Person::getFirstName)
+                      .sorted()
+                      .collect(Collectors.toList());
 
         assertThat(names).isEqualTo(Arrays.asList("Anastasia", "Bernard", "Charlotte", "Daphne", "Duncan", "Eustace", "Felicity", "Gerald"));
     }
@@ -201,9 +262,9 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution
         names = people.stream()
-                .sorted(Comparator.comparing(Person::getLastName).thenComparing(Person::getFirstName))
-                .limit(3)
-                .collect(Collectors.toList());
+                      .sorted(Comparator.comparing(Person::getLastName).thenComparing(Person::getFirstName))
+                      .limit(3)
+                      .collect(Collectors.toList());
 
         assertThat(names).containsExactlyElementsOf(Arrays.asList(
                 new Person("Felicity", "Coniston"),
@@ -232,10 +293,10 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution
         names = people.stream()
-                .flatMap(p -> Stream.of(p.getFirstName(), p.getLastName()))
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+                      .flatMap(p -> Stream.of(p.getFirstName(), p.getLastName()))
+                      .distinct()
+                      .sorted()
+                      .collect(Collectors.toList());
 
         assertThat(names).isEqualTo(Arrays.asList("Anastasia", "Bernard", "Charlotte", "Coniston", "Daphne", "Duncan", "Eustace", "Felicity", "Gerald", "Hawkshead", "Sawrey"));
     }
@@ -289,13 +350,13 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution using iterate() and range()
         sum = IntStream.iterate(1, i -> i + 1)
-                .limit(12)
-                .sum();
+                       .limit(12)
+                       .sum();
 
         // Example solution using range() or rangeClosed()
 //        sum = IntStream.range(1, 13)
         sum = IntStream.rangeClosed(1, 12)
-                .sum();
+                       .sum();
 
         assertThat(sum).isEqualTo(78L);
     }
@@ -316,7 +377,7 @@ public class StreamsExercisesExampleSolutions {
 
         // Example solution
         groups = people.stream()
-                .collect(Collectors.groupingBy(Person::getLastName));
+                       .collect(Collectors.groupingBy(Person::getLastName));
 
         assertThat(groups).containsKeys("Coniston", "Hawkshead", "Sawrey");
 
@@ -345,17 +406,17 @@ public class StreamsExercisesExampleSolutions {
         private String firstName;
         private String lastName;
 
-        public Person(String firstName, String lastName) {
+        Person(String firstName, String lastName) {
 
             this.firstName = firstName;
             this.lastName = lastName;
         }
 
-        public String getFirstName() {
+        String getFirstName() {
             return firstName;
         }
 
-        public String getLastName() {
+        String getLastName() {
             return lastName;
         }
 
