@@ -74,7 +74,7 @@ public class StreamsExercises {
 
         // TODO
         
-        assertThat(interceptedText.toString(defaultCharset())).isEqualTo("I\ncan\nprint\na\na\nstream\n.\n");
+        assertThat(interceptedText.toString(defaultCharset())).isEqualTo("I\ncan\nprint\na\nstream\n.\n");
     }
 
     /*
