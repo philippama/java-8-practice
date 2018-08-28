@@ -1,18 +1,17 @@
 package pm.java8.streams;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.TeeOutputStream;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
+import static java.nio.charset.Charset.defaultCharset;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * This test suite demonstrates the following ways of generating and using streams.
@@ -68,12 +67,14 @@ public class StreamsExercises {
     @Test
     public void verySimpleForEach() {
         List<String> sentence = Arrays.asList("I", "can", "print", "a", "stream", ".");
+        final ByteArrayOutputStream interceptedText = interceptSystemOut();
 
         // You could do this with a List.forEach() but use a stream for practice:
         // convert the the sentence to a stream and print the words, one per line.
 
         // TODO
-
+        
+        assertThat(interceptedText.toString(defaultCharset())).isEqualTo("I\ncan\nprint\na\na\nstream\n.\n");
     }
 
     /*
@@ -81,6 +82,7 @@ public class StreamsExercises {
      *  Arrays.stream()
      *  Stream.count()
      */
+
     @Test
     public void countNumberOfElementsInStream() {
         String words[] = {"There", "are", "four", "words"};
@@ -93,13 +95,13 @@ public class StreamsExercises {
 
         assertThat(count).isEqualTo(4);
     }
-
     /*
      * Shows:
      *  Collection.stream()
      *  Stream.mapToInt()
      *  Stream.sum()
      */
+
     @Test
     public void sumWordLengths() {
         List<String> words = Arrays.asList("one", "two", "three", "four", "five");
@@ -112,7 +114,6 @@ public class StreamsExercises {
 
         assertThat(totalLength).isEqualTo(19);
     }
-
     /*
      * Shows:
      *  Collection.stream()
@@ -120,6 +121,7 @@ public class StreamsExercises {
      *  Stream.collect()
      *  Collectors.toList()
      */
+
     @Test
     public void makeListOfFirstNamesFromPeople() {
 
@@ -131,13 +133,13 @@ public class StreamsExercises {
 
         assertThat(names).isEqualTo(Arrays.asList("Bernard", "Duncan", "Anastasia", "Charlotte", "Daphne", "Gerald", "Eustace", "Felicity"));
     }
-
     /*
      * Shows:
      *  Collection.stream()
      *  Stream.collect()
      *  Collectors.toMap()
      */
+
     @Test
     public void makeMapOfFirstNameToLastName() {
 
@@ -158,13 +160,13 @@ public class StreamsExercises {
                 entry("Felicity", "Coniston")
         );
     }
-
     /*
      * Shows:
      *  Collection.stream()
      *  Stream.collect()
      *  Collectors.toMap()
      */
+
     @Test
     public void makeMapOfLowerFirstNameToUpperLastName() {
 
@@ -186,7 +188,6 @@ public class StreamsExercises {
                 entry("felicity", "CONISTON")
         );
     }
-
     /*
      * Shows:
      *  Collection.stream()
@@ -194,6 +195,7 @@ public class StreamsExercises {
      *  Stream.collect()
      *  Collectors.joining()
      */
+
     @Test
     public void makeStringOfFirstNamesFromPeople() {
 
@@ -206,7 +208,6 @@ public class StreamsExercises {
 
         assertThat(names).isEqualTo("Bernard,Duncan,Anastasia,Charlotte,Daphne,Gerald,Eustace,Felicity");
     }
-
     /*
      * Shows:
      *  Collection.stream()
@@ -215,6 +216,7 @@ public class StreamsExercises {
      *  Stream.collect()
      *  Collectors.toList()
      */
+
     @Test
     public void makeListOfFirstNamesFromPeopleInAlphabeticalOrder() {
 
@@ -226,7 +228,6 @@ public class StreamsExercises {
 
         assertThat(names).isEqualTo(Arrays.asList("Anastasia", "Bernard", "Charlotte", "Daphne", "Duncan", "Eustace", "Felicity", "Gerald"));
     }
-
     /*
      * Shows:
      *  Collection.stream()
@@ -236,6 +237,7 @@ public class StreamsExercises {
      *  Stream.collect()
      *  Collectors.toList()
      */
+
     @Test
     public void makeListOf1st3PeopleInAlphabeticalOrderLastNameThenFirstName() {
 
@@ -252,7 +254,6 @@ public class StreamsExercises {
                 new Person("Gerald", "Hawkshead")
         ));
     }
-
     /*
      * Shows:
      *  Collection.stream()
@@ -263,6 +264,7 @@ public class StreamsExercises {
      *  Stream.collect()
      *  Collectors.toList()
      */
+
     @Test
     public void makeListOfAllUniqueFirstAndLastNamesInAlphabeticalOrder() {
 
@@ -276,7 +278,6 @@ public class StreamsExercises {
         assertThat(names).isEqualTo(Arrays.asList("Anastasia", "Bernard", "Charlotte", "Coniston", "Daphne", "Duncan",
                                                   "Eustace", "Felicity", "Gerald", "Hawkshead", "Sawrey"));
     }
-
     /*
      * Shows:
      *  Files.lines() or Files.newBufferedReader()
@@ -286,6 +287,7 @@ public class StreamsExercises {
      *  Stream.collect()
      *  Collectors.toList()
      */
+
     @Test
     public void makeListOfAllFourLetteredWords() throws IOException {
 
@@ -300,13 +302,13 @@ public class StreamsExercises {
 
         assertThat(fourLetteredWords).containsOnly("unam", "tibi", "tuum", "fili");
     }
-
     /*
      * Shows:
      *  IntStream.iterate() or IntStream.range() or IntStream.rangeClosed()
      *  IntStream.limit() if using iterate()
      *  IntStream.sum()
      */
+
     @Test
     public void sumFirstTwelveIntegersWithIntStream() {
 
@@ -318,13 +320,13 @@ public class StreamsExercises {
 
         assertThat(sum).isEqualTo(78L);
     }
-
     /*
      * Shows:
      *  Collection.stream()
      *  Stream.collect()
      *  Collectors.groupingBy()
      */
+
     @Test
     public void getPeopleByLastName() {
 
@@ -357,12 +359,12 @@ public class StreamsExercises {
                 new Person("Daphne", "Sawrey")
         ));
     }
-
     /*
     * Shows:
     *  Collection.stream()
     *  Stream.reduce()
     */
+
     @Test
     public void makeHashMapOfFirstNameToLastName() {
 
@@ -387,11 +389,10 @@ public class StreamsExercises {
                 entry("Felicity", "Coniston")
         );
     }
-
     static class Person {
+
         private String firstName;
         private String lastName;
-
         Person(String firstName, String lastName) {
 
             this.firstName = firstName;
@@ -431,5 +432,12 @@ public class StreamsExercises {
                     ", lastName='" + lastName + '\'' +
                     '}';
         }
+
+    }
+    
+    private ByteArrayOutputStream interceptSystemOut() {
+        final ByteArrayOutputStream interceptedText = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(new TeeOutputStream(System.out, interceptedText)));
+        return interceptedText;
     }
 }
