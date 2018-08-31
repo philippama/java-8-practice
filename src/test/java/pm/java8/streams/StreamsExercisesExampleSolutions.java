@@ -1,5 +1,6 @@
 package pm.java8.streams;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,8 +19,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.nio.charset.Charset.defaultCharset;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
+import static pm.java8.streams.StreamsExercises.interceptSystemOut;
 
 /**
  * This test suite demonstrates the following ways of generating and using streams.
@@ -75,12 +78,15 @@ public class StreamsExercisesExampleSolutions {
     @Test
     public void verySimpleForEach() {
         List<String> sentence = Arrays.asList("I", "can", "print", "a", "stream", ".");
+        final ByteArrayOutputStream interceptedText = interceptSystemOut();
 
         // You could do this with a List.forEach() but use a stream for practice:
         // convert the the sentence to a stream and print the words, one per line.
 
         // Example solution
         sentence.stream().forEach(System.out::println);
+
+        assertThat(interceptedText.toString(defaultCharset())).isEqualTo("I\ncan\nprint\na\nstream\n.\n");
     }
 
     /*

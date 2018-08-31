@@ -435,7 +435,7 @@ public class StreamsExercises {
 
     }
     
-    private ByteArrayOutputStream interceptSystemOut() {
+    static ByteArrayOutputStream interceptSystemOut() {
         final ByteArrayOutputStream interceptedText = new ByteArrayOutputStream();
         System.setOut(new PrintStream(new TeeOutputStream(System.out, interceptedText)));
         return interceptedText;
